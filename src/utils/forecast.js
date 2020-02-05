@@ -16,7 +16,8 @@ const forecast = (latitude, longitude, callback) => {
                 `${todaySummary}
 It is currently ${temperature}° out.
 There is a ${rainChance * 100} % chance of rain.
-Maximum temperature is ${highTemp}° around ${toRealHour(highTime)} o'clock with minimum of ${lowTemp}° around ${toRealHour(lowTime)} o'clock.`)
+Maximum temperature is ${highTemp}° around ${toRealHour(highTime)} o'clock with minimum of ${lowTemp}° around ${toRealHour(lowTime)} o'clock.
+Tomorrow will be ${body.daily.data[1].summary.toLowerCase()}`)
         }
     })
 }
