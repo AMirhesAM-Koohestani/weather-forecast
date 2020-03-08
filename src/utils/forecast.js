@@ -13,11 +13,11 @@ const forecast = (latitude, longitude, callback) => {
             const { precipProbability: rainChance, temperature } = body.currently
             const { temperatureHigh: highTemp, temperatureHighTime: highTime, temperatureLow: lowTemp, temperatureLowTime: lowTime, summary: todaySummary } = body.daily.data[0]
             callback(undefined,
-                `${todaySummary}
+                {timezone: body.timezone ,message: `${todaySummary}
 It is currently ${temperature}° out.
 There is a ${rainChance * 100} % chance of rain.
-Maximum temperature is ${highTemp}° around ${toRealHour(highTime)} o'clock with minimum of ${lowTemp}° around ${toRealHour(lowTime)} o'clock.
-Tomorrow will be ${body.daily.data[1].summary.toLowerCase()}`)
+The high is ${highTemp}° around ${toRealHour(highTime)} o'clock with low of ${lowTemp}° around ${toRealHour(lowTime)} o'clock.
+Tomorrow will be ${body.daily.data[1].summary.toLowerCase()}`})
         }
     })
 }

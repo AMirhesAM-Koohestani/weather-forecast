@@ -42,42 +42,47 @@ app.get('/help', (req, res) => {
     })
 })
 
-app.get('/products', (req, res) => {
-    if (!req.query.search) {
-        return res.send({
-            error: 'You must provide a search term'
-        })
-    }
-    console.log(req.query.price)
-    res.send({
-        products: []
-    })
-})
-
 app.get('/weather', (req, res) => {
-    if (!req.query.address) {
+    if (!req.query.address && !req.query.location) {
         return res.send({
-            error: 'You must provide an address term'
+            error: 'You must provide an address or a location term'
         })
     }
 
     const address = req.query.address
 
-    geocode(address, (error, { latitude, longitude, location } = {}) => {
-        if (error) {
-            return res.send({ error })
-        }
+    if (address) {
+        geocode(address, (error, { latitude, longitude, location } = {}) => {
+            if (error) {
+                return res.send({ error })
+            }
+            forecast(latitude, longitude, (error, forecastData) => {
+                if (error) {
+                    return res.send({ error })
+                }
+                res.send({
+                    location,
+                    forecast: forecastData.message,
+                    address
+                })
+            })
+        })
+    } else {
+        const coords = req.query.location.split(',')
+        const latitude = coords[0]
+        const longitude = coords[1]
+        
         forecast(latitude, longitude, (error, forecastData) => {
             if (error) {
                 return res.send({ error })
             }
             res.send({
-                location,
-                forecast: forecastData,
-                address
+                location: forecastData.timezone,
+                forecast: forecastData.message,
             })
         })
-    })
+    }
+
 })
 
 app.get('/help/*', (req, res) => {
